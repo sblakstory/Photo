@@ -1,3 +1,106 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#ffd329"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg"><title>Seblak Story Photobooth</title><style>
-:root{--y:#ffd329;--b:#171717;--bg:#fff9df}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--b);font-family:system-ui,sans-serif}header{height:66px;background:var(--y);border-bottom:3px solid var(--b);display:grid;place-items:center}.brand{font-size:23px;font-weight:1000}.brand span{display:block;text-align:center;font-size:10px;letter-spacing:2px}main{width:min(100%,760px);margin:auto;padding:14px}button,select{font:inherit;font-weight:850;border:2px solid var(--b);border-radius:12px;padding:12px;background:white;color:var(--b)}button.primary{background:var(--y)}button.dark{background:var(--b);color:white}button:disabled{opacity:.4}#startCamera{width:100%;margin-bottom:9px}.camera{position:relative;aspect-ratio:4/3;background:#111;border:2px solid var(--b);border-radius:16px;overflow:hidden;display:grid;place-items:center}video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}#cameraHint{color:white;font-size:14px}#countdown{display:none;position:absolute;color:white;font-size:clamp(80px,20vw,150px);font-weight:1000;text-shadow:0 3px 15px #000}.settings{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}label{display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:850}select{width:100%;padding:10px}.actions{display:grid;grid-template-columns:1fr 58px;gap:8px}#capture{font-size:17px;padding:15px}#switchCamera{font-size:20px}#status{text-align:center;font-size:12px;font-weight:750;min-height:18px;margin:9px 0}#result{display:none;margin-top:14px}#strip{display:block;width:min(100%,300px);height:auto;margin:auto;background:white;border:1px solid #ddd}.resultActions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}.resultActions button{padding:11px 4px;font-size:13px}@media(min-width:650px){main{padding:20px}}@media print{body{background:white}header,#startCamera,.settings,.actions,#status,.resultActions{display:none!important}main{padding:0}.camera{display:none}#result{display:block!important}#strip{width:58mm;max-width:100%;border:0}}
-</style></head><body><header><div class="brand">SEBLAK STORY<span>PHOTOBOOTH</span></div></header><main><button class="primary" id="startCamera">AKTIFKAN KAMERA</button><div class="camera"><video id="video" autoplay playsinline muted></video><div id="cameraHint">Kamera belum aktif</div><div id="countdown"></div></div><div class="settings"><label>COUNTDOWN<select id="timer"><option value="3">3 detik</option><option value="5" selected>5 detik</option><option value="10">10 detik</option></select></label><label>JUMLAH FOTO<select id="photoCount"><option value="3" selected>3 foto</option><option value="4">4 foto</option></select></label></div><div class="actions"><button class="dark" id="capture" disabled>AMBIL FOTO</button><button id="switchCamera" disabled aria-label="Ganti kamera">↻</button></div><div id="status">Siap berfoto</div><div id="result"><canvas id="strip" width="800" height="1800"></canvas><div class="resultActions"><button class="primary" id="save">SIMPAN</button><button class="dark" id="print">CETAK</button><button id="retake">ULANGI</button></div></div></main><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffd329">
+<meta name="description" content="Seblak Story Photobooth Pro">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<title>Seblak Story Photobooth Pro</title>
+<style>
+:root{--yellow:#ffd329;--ink:#171717;--cream:#fff9df;--white:#fff;--muted:#777}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+button{font:inherit;cursor:pointer}
+.topbar{height:68px;background:var(--yellow);border-bottom:3px solid var(--ink);display:flex;align-items:center;justify-content:center;position:sticky;top:0;z-index:5}
+.brand{text-align:center;font-size:clamp(20px,3vw,27px);font-weight:1000;letter-spacing:1px;line-height:1}
+.brand small{display:block;font-size:10px;letter-spacing:4px;margin-top:6px}
+main{width:min(1100px,100%);margin:auto;padding:clamp(14px,3vw,28px)}
+.screen{display:none}.screen.active{display:block}
+.hero{text-align:center;padding:clamp(20px,6vw,65px) 12px 28px}
+.hero-mark{width:90px;height:90px;border:4px solid var(--ink);border-radius:26px;background:var(--yellow);display:grid;place-items:center;margin:0 auto 18px;font-size:42px;box-shadow:6px 6px 0 var(--ink)}
+h1{font-size:clamp(28px,5vw,46px);line-height:1.05;margin:0 0 8px}
+.subtitle{color:#514b36;margin:0 auto 24px;max-width:460px}
+.btn{border:2px solid var(--ink);border-radius:14px;padding:14px 22px;font-weight:900;background:#fff;color:var(--ink);box-shadow:0 3px 0 var(--ink);transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
+.btn-yellow{background:var(--yellow)}.btn-dark{background:var(--ink);color:white}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:4px 0 18px}
+.section-head h2{margin:0;font-size:clamp(22px,3vw,30px)}
+.section-head p{margin:5px 0 0;color:var(--muted);font-size:13px}
+.template-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.template-card{border:2px solid var(--ink);border-radius:18px;padding:12px;background:white;text-align:left;box-shadow:0 4px 0 var(--ink);min-width:0}
+.template-card.selected{outline:4px solid var(--yellow);border-width:3px}
+.template-card:focus-visible,.btn:focus-visible{outline:4px solid #806000;outline-offset:3px}
+.thumb{height:210px;border-radius:11px;display:grid;place-items:center;overflow:hidden;background:#f6f0dc}
+.template-card strong{display:block;margin:10px 0 3px;font-size:15px}
+.template-card small{color:var(--muted);font-size:12px}
+.tag{display:inline-block;background:var(--yellow);border:1px solid var(--ink);border-radius:20px;padding:3px 8px;font-size:10px;font-weight:900;margin-top:7px}
+.card-actions{display:flex;gap:12px;justify-content:space-between;align-items:center;margin-top:22px;flex-wrap:wrap}
+.card-actions .right{display:flex;gap:10px;margin-left:auto}
+.preview-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,360px);gap:24px;align-items:center}
+.preview-stage{background:#e9e1c8;border:2px dashed #b6a878;border-radius:18px;padding:20px;display:grid;place-items:center;min-height:420px}
+.preview-stage canvas{display:block;max-height:65vh;max-width:100%;width:auto;height:auto;box-shadow:0 5px 18px #0002}
+.details h2{margin:0 0 8px}.details p{color:#625b45;line-height:1.5}
+.spec-list{padding:0;list-style:none;margin:18px 0}.spec-list li{padding:9px 0;border-bottom:1px solid #e6ddbf;font-size:14px}
+.note{background:#fff2bd;border:1px solid #e2c75c;border-radius:12px;padding:12px;font-size:12px;line-height:1.5}
+.step-pill{font-size:11px;font-weight:900;letter-spacing:1px;color:#74642a;margin-bottom:8px}
+footer{text-align:center;color:#80785d;font-size:11px;padding:24px 8px}
+@media(max-width:760px){.template-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.thumb{height:180px}.preview-layout{grid-template-columns:1fr}.preview-stage{min-height:300px}.preview-stage canvas{max-height:48vh}}
+@media(max-width:390px){.template-grid{gap:10px}.template-card{padding:8px}.thumb{height:150px}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="brand">SEBLAK STORY<small>PHOTOBOOTH PRO</small></div></header>
+<main>
+<section id="home" class="screen active">
+  <div class="hero">
+    <div class="hero-mark">📸</div>
+    <h1>Abadikan Momenmu!</h1>
+    <p class="subtitle">Bikin foto seru bareng teman dan keluarga di Seblak Story.</p>
+    <button class="btn btn-dark" id="startBtn">MULAI FOTO <span aria-hidden="true">→</span></button>
+  </div>
+</section>
+
+<section id="templates" class="screen">
+  <div class="section-head">
+    <div><div class="step-pill">LANGKAH 1 DARI 4</div><h2>Pilih Bingkai Foto</h2><p>Pilih desain yang paling kamu suka.</p></div>
+  </div>
+  <div id="templateGrid" class="template-grid"></div>
+  <div class="card-actions">
+    <button class="btn" id="homeBtn">← KEMBALI</button>
+    <div class="right"><button class="btn btn-yellow" id="previewBtn" disabled>LIHAT PREVIEW →</button></div>
+  </div>
+</section>
+
+<section id="preview" class="screen">
+  <div class="section-head"><div><div class="step-pill">PREVIEW TEMPLATE</div><h2 id="previewTitle">Classic Yellow</h2><p>Periksa bingkai sebelum lanjut.</p></div></div>
+  <div class="preview-layout">
+    <div class="preview-stage"><canvas id="templatePreview" width="600" height="1350"></canvas></div>
+    <div class="details">
+      <h2 id="detailName">Classic Yellow</h2>
+      <p id="detailDescription"></p>
+      <ul class="spec-list" id="detailSpecs"></ul>
+      <div class="note">Tahap 1 selesai: template sudah dipilih. Pada Tahap 2, layar ini akan terhubung ke kamera tablet, countdown, dan pengambilan foto otomatis.</div>
+      <div class="card-actions"><button class="btn" id="backTemplates">← GANTI</button><button class="btn btn-dark" id="continueBtn">LANJUT FOTO →</button></div>
+    </div>
+  </div>
+</section>
+
+<section id="cameraNext" class="screen">
+  <div class="hero">
+    <div class="hero-mark">✨</div>
+    <h1>Template tersimpan!</h1>
+    <p class="subtitle">Pilihan bingkai: <strong id="chosenName"></strong></p>
+    <div class="note">Ini penanda integrasi Tahap 1. Mesin kamera dan editor foto akan dibangun pada tahap berikutnya, tanpa mengubah sistem template ini.</div>
+    <br><br>
+    <button class="btn btn-yellow" id="returnHome">KEMBALI KE AWAL</button>
+  </div>
+</section>
+</main>
+<footer>SEBLAK STORY · SETIAP MANGKOK PUNYA CERITA</footer>
+<script src="./templates.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>

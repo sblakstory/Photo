@@ -1,0 +1,9 @@
+// Template photobooth berbasis konfigurasi. Mudah ditambah tanpa mengubah mesin aplikasi.
+window.PHOTO_TEMPLATES = [
+ {id:"classic-yellow-3",name:"Classic Yellow",count:3,ratio:"strip",bg:"#FFD329",accent:"#171717",description:"Bingkai kuning khas Seblak Story dengan tiga momen foto.",slots:[{x:0.075,y:0.205,w:0.85,h:0.235},{x:0.075,y:0.465,w:0.85,h:0.235},{x:0.075,y:0.725,w:0.85,h:0.235}],style:"classic",label:"FAVORIT"},
+ {id:"four-moments",name:"Four Moments",count:4,ratio:"strip",bg:"#FFF9DF",accent:"#171717",description:"Empat foto berurutan untuk mengabadikan momen bersama.",slots:[{x:0.09,y:0.16,w:0.82,h:0.18},{x:0.09,y:0.355,w:0.82,h:0.18},{x:0.09,y:0.55,w:0.82,h:0.18},{x:0.09,y:0.745,w:0.82,h:0.18}],style:"minimal",label:"4 FOTO"},
+ {id:"sweet-moment",name:"Sweet Moment",count:3,ratio:"strip",bg:"#FFE5E9",accent:"#8D314C",description:"Warna pink lembut dengan aksen hati dan dekorasi manis.",slots:[{x:0.10,y:0.205,w:0.80,h:0.235},{x:0.10,y:0.465,w:0.80,h:0.235},{x:0.10,y:0.725,w:0.80,h:0.235}],style:"sweet",label:"CUTE"},
+ {id:"monochrome",name:"Monochrome",count:3,ratio:"strip",bg:"#E8E8E8",accent:"#111111",description:"Gaya hitam-putih minimalis dan elegan.",slots:[{x:0.075,y:0.205,w:0.85,h:0.235},{x:0.075,y:0.465,w:0.85,h:0.235},{x:0.075,y:0.725,w:0.85,h:0.235}],style:"mono",label:"MINIMAL"},
+ {id:"retro-film",name:"Retro Film",count:3,ratio:"strip",bg:"#E8D2AE",accent:"#563D2E",description:"Nuansa film analog dengan warna hangat dan aksen retro.",slots:[{x:0.10,y:0.205,w:0.80,h:0.235},{x:0.10,y:0.465,w:0.80,h:0.235},{x:0.10,y:0.725,w:0.80,h:0.235}],style:"retro",label:"VINTAGE"},
+ {id:"seblak-special",name:"Seblak Special",count:4,ratio:"strip",bg:"#FFD329",accent:"#171717",description:"Empat foto dengan identitas Seblak Story dan aksen cabai.",slots:[{x:0.09,y:0.16,w:0.82,h:0.18},{x:0.09,y:0.355,w:0.82,h:0.18},{x:0.09,y:0.55,w:0.82,h:0.18},{x:0.09,y:0.745,w:0.82,h:0.18}],style:"special",label:"SEBLAK STORY"}
+];
