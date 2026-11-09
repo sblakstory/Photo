@@ -58,6 +58,13 @@ PERUBAHAN v1.1.2
 - Footer hanya menampilkan nomor versi dan © Seblak Story 2026.
 - Pembersihan cache lama setelah service worker baru aktif tetap berjalan otomatis.
 
-PERUBAHAN v1.1.3
+PERUBAHAN v1.1.4
 - Nomor versi dan copyright dipindahkan ke footer paling bawah.
 - Ukuran teks kecil dan warna lebih lembut agar tidak mengganggu tampilan.
+
+
+CATATAN UPDATE v1.1.4
+- Memperbaiki kesalahan sintaks JavaScript pada handler Service Worker.
+- Kesalahan tersebut dapat menghentikan seluruh app.js diproses sehingga tombol MULAI FOTO dan tombol navigasi lain tidak merespons.
+- Handler update Service Worker dirapikan agar tidak mengganggu fungsi tombol.
+- Versi aplikasi dan cache dinaikkan ke 1.1.4.

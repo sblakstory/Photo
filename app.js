@@ -1,4 +1,4 @@
-const APP_VERSION='1.1.3';
+const APP_VERSION='1.1.4';
 const $=id=>document.getElementById(id);
 $('appVersion').textContent='v'+APP_VERSION;
 let selectedTemplateId=localStorage.getItem('ss_selected_template')||'classic-yellow-3';
@@ -31,38 +31,15 @@ $('backTemplates').onclick=()=>showScreen('templates');
 $('continueBtn').onclick=()=>{$('chosenName').textContent=selected().name;showScreen('cameraNext')};
 $('returnHome').onclick=()=>showScreen('home');
 renderTemplates();
-if('serviceWorker'in navigator){
- window.addEventListener('load',async()=>{
-  try{
-   const reg=await navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'});
-   await reg.update();
-   reg.addEventListener('updatefound',()=>{
-    const worker=reg.installing;
-    if(!worker)return;
-    
-    worker.addEventListener('statechange',()=>{
-     if(worker.state==='installed'){
-      if(navigator.serviceWorker.controller){
-       sessionStorage.setItem('ss_update_success','1');
-       
-       worker.postMessage({type:'SKIP_WAITING'});
-      }else{
-       
-      }
-     }
-     if(worker.state==='redundant')
-    });
-   });
-   if(reg.waiting&&navigator.serviceWorker.controller){
-    sessionStorage.setItem('ss_update_success','1');
-    reg.waiting.postMessage({type:'SKIP_WAITING'});
-   }
-  }catch(err){
-   
-   console.warn('Service worker update:',err);
-  }
- });
- navigator.serviceWorker.addEventListener('controllerchange',()=>{
-  if(sessionStorage.getItem('ss_update_success'))location.reload();
- });
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const registration = await navigator.serviceWorker.register('./sw.js', {
+        updateViaCache: 'none'
+      });
+      await registration.update();
+    } catch (error) {
+      console.warn('Service worker:', error);
+    }
+  });
 }

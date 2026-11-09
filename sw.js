@@ -1,4 +1,4 @@
-const APP_VERSION='1.1.3';
+const APP_VERSION='1.1.4';
 const CACHE='ss-photobooth-stage1-v'+APP_VERSION;
 const PREFIX='ss-photobooth-';
 const FILES=['./','./index.html','./app.js','./templates.js','./manifest.webmanifest','./icon.svg'];
