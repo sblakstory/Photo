@@ -49,6 +49,30 @@ h1{font-size:clamp(28px,5vw,46px);line-height:1.05;margin:0 0 8px}
 footer{text-align:center;color:#80785d;font-size:11px;padding:24px 8px}
 @media(max-width:760px){.template-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.thumb{height:180px}.preview-layout{grid-template-columns:1fr}.preview-stage{min-height:300px}.preview-stage canvas{max-height:48vh}}
 @media(max-width:390px){.template-grid{gap:10px}.template-card{padding:8px}.thumb{height:150px}}
+
+.camera-layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,.8fr);gap:20px;align-items:start}
+.camera-stage{position:relative;min-height:300px;aspect-ratio:4/3;background:#171717;border:3px solid #171717;border-radius:18px;overflow:hidden;display:grid;place-items:center}
+.camera-stage video{width:100%;height:100%;object-fit:cover;display:block;transform:scaleX(-1)}
+.camera-placeholder{position:absolute;color:white;text-align:center;font-size:42px;line-height:1.7}
+.camera-placeholder strong,.camera-placeholder small{display:block;font-size:16px}
+.camera-placeholder small{font-size:12px;color:#ddd}
+.countdown{position:absolute;inset:0;display:grid;place-items:center;background:#0005;color:#fff;font-size:clamp(80px,18vw,180px);font-weight:1000;text-shadow:0 4px 16px #000}
+.camera-controls{display:flex;flex-direction:column;gap:10px}
+.camera-controls .btn{width:100%;padding:11px 14px}
+.camera-status{margin:0;padding:10px;background:#fff2bd;border-radius:10px;font-size:13px}
+.camera-label{font-weight:800;font-size:13px}
+.camera-select{width:100%;padding:12px;border:2px solid #171717;border-radius:10px;background:#fff;font:inherit}
+.camera-progress{margin:5px 0;font-size:13px}
+.progress-track{height:10px;background:#e7dfc7;border-radius:20px;overflow:hidden;margin-top:6px}
+.progress-track span{display:block;width:0;height:100%;background:#e0a900;transition:width .2s}
+.camera-help{font-size:11px;color:#777;line-height:1.5;margin:0}
+.result-layout{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:22px;align-items:start}
+.result-preview{max-height:70vh;overflow:auto;background:#e9e1c8;border:2px dashed #b6a878;border-radius:16px;padding:14px;text-align:center}
+.result-preview canvas{width:auto;height:auto;max-width:100%;max-height:66vh;box-shadow:0 5px 18px #0002}
+.result-actions{display:flex;flex-direction:column;gap:12px}
+.result-actions .btn{width:100%}
+#saveStatus{font-size:12px;color:#5c552f}
+@media(max-width:760px){.camera-layout,.result-layout{grid-template-columns:1fr}.camera-stage{min-height:220px}.result-actions{display:grid;grid-template-columns:1fr 1fr}.result-actions p{grid-column:1/-1}}
 </style>
 </head>
 <body>
@@ -82,24 +106,49 @@ footer{text-align:center;color:#80785d;font-size:11px;padding:24px 8px}
       <h2 id="detailName">Classic Yellow</h2>
       <p id="detailDescription"></p>
       <ul class="spec-list" id="detailSpecs"></ul>
-      <div class="note">Tahap 1 selesai: template sudah dipilih. Pada Tahap 2, layar ini akan terhubung ke kamera tablet, countdown, dan pengambilan foto otomatis.</div>
-      <div class="card-actions"><button class="btn" id="backTemplates">← GANTI</button><button class="btn btn-dark" id="continueBtn">LANJUT FOTO →</button></div>
+      <div class="note">Pastikan kamera tablet diizinkan. Foto akan diambil satu per satu dan disusun otomatis ke bingkai pilihanmu.</div>
+      <div class="card-actions"><button class="btn" id="backTemplates">← GANTI</button><button class="btn btn-dark" id="continueBtn">BUKA KAMERA →</button></div>
     </div>
   </div>
 </section>
 
 <section id="cameraNext" class="screen">
-  <div class="hero">
-    <div class="hero-mark">✨</div>
-    <h1>Template tersimpan!</h1>
-    <p class="subtitle">Pilihan bingkai: <strong id="chosenName"></strong></p>
-    <div class="note">Ini penanda integrasi Tahap 1. Mesin kamera dan editor foto akan dibangun pada tahap berikutnya, tanpa mengubah sistem template ini.</div>
-    <br><br>
-    <button class="btn btn-yellow" id="returnHome">KEMBALI KE AWAL</button>
+  <div class="section-head"><div><div class="step-pill">LANGKAH 2 DARI 4</div><h2>Siapkan Kamera</h2><p>Posisikan wajah di tengah bingkai.</p></div></div>
+  <div class="camera-layout">
+    <div class="camera-stage">
+      <video id="cameraVideo" autoplay playsinline muted></video>
+      <div id="cameraPlaceholder" class="camera-placeholder">📷<br><strong>Kamera belum aktif</strong><small>Tekan AKTIFKAN KAMERA</small></div>
+      <div id="countdown" class="countdown" hidden></div>
+    </div>
+    <div class="camera-controls">
+      <p id="cameraStatus" class="camera-status" role="status">Kamera membutuhkan izin dari browser.</p>
+      <label class="camera-label" for="cameraSelect">Pilih kamera</label>
+      <select id="cameraSelect" class="camera-select"><option value="">Kamera utama (otomatis)</option></select>
+      <button class="btn btn-yellow" id="enableCamera">AKTIFKAN KAMERA</button>
+      <button class="btn" id="switchCamera" disabled>GANTI KAMERA</button>
+      <div class="camera-progress"><strong id="captureProgress">0 / 3 FOTO</strong><div class="progress-track"><span id="progressFill"></span></div></div>
+      <button class="btn btn-dark" id="captureBtn" disabled>MULAI HITUNG MUNDUR</button>
+      <button class="btn" id="retakeBtn" disabled>ULANGI FOTO</button>
+      <button class="btn" id="cameraBack">← KEMBALI</button>
+      <p class="camera-help">Setiap foto memakai hitung mundur 3 detik. Pastikan browser memiliki izin kamera dan situs dibuka melalui HTTPS.</p>
+    </div>
+  </div>
+</section>
+
+<section id="result" class="screen">
+  <div class="section-head"><div><div class="step-pill">LANGKAH 3 DARI 4</div><h2>Hasil Photostrip</h2><p>Foto siap disimpan ke perangkat.</p></div></div>
+  <div class="result-layout">
+    <div class="result-preview"><canvas id="resultCanvas" width="1200" height="2700"></canvas></div>
+    <div class="result-actions">
+      <button class="btn btn-yellow" id="downloadBtn">SIMPAN FOTO PNG</button>
+      <button class="btn" id="resultRetake">FOTO ULANG</button>
+      <button class="btn" id="finishBtn">SELESAI</button>
+      <p id="saveStatus" role="status"></p>
+    </div>
   </div>
 </section>
 </main>
-<footer style="padding:18px 8px 10px;font-size:9px;line-height:1.4;color:#9a9278"><div id="appVersion">v1.1.4</div><div>© Seblak Story 2026</div></footer>
+<footer style="padding:18px 8px 10px;font-size:9px;line-height:1.4;color:#9a9278"><div id="appVersion">v1.2.0</div><div>© Seblak Story 2026</div></footer>
 <script src="./templates.js"></script>
 <script src="./app.js"></script>
 </body>
