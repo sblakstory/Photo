@@ -1,5 +1,5 @@
 SEBLAK STORY PHOTOBOOTH PRO — TAHAP 1
-Versi paket: 1.1.0
+Versi paket: 1.1.3
 
 SPESIFIKASI YANG DITETAPKAN
 - Kamera: kamera tablet (Samsung Tab A9)
@@ -37,3 +37,27 @@ FILE
 - icon.svg
 
 Catatan: Paket ini merupakan implementasi Tahap 1, bukan aplikasi photobooth lengkap final.
+
+FITUR PEMBARUAN v1.1.1
+- Nomor versi tampil di footer aplikasi.
+- Status update tampil di bawah versi.
+- Tombol CEK UPDATE untuk pemeriksaan manual.
+- Service worker memakai cache name baru sesuai versi.
+- Setelah service worker baru berhasil aktif, cache lama dengan prefix ss-photobooth- dihapus.
+- Jika instalasi/update gagal, status menampilkan pesan gagal.
+- Navigasi mengambil versi jaringan terlebih dahulu (no-store) agar index terbaru tidak tertahan cache browser.
+
+PENTING:
+- Cache aplikasi lama yang memiliki prefix ss-photobooth- akan dibersihkan setelah aktivasi SW baru sukses.
+- Cache milik situs/aplikasi lain tidak disentuh.
+- Pastikan semua file paket diunggah dan di-commit bersama.
+
+PERUBAHAN v1.1.2
+- Tombol CEK UPDATE dihapus.
+- Status update tidak ditampilkan.
+- Footer hanya menampilkan nomor versi dan © Seblak Story 2026.
+- Pembersihan cache lama setelah service worker baru aktif tetap berjalan otomatis.
+
+PERUBAHAN v1.1.3
+- Nomor versi dan copyright dipindahkan ke footer paling bawah.
+- Ukuran teks kecil dan warna lebih lembut agar tidak mengganggu tampilan.
